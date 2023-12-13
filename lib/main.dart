@@ -1,3 +1,11 @@
+/* DICEE - Roll the dice. The lower bound takes the trash out!
+*
+* Made by: London App Brewery (Yu, A.)
+* Cloned by: Felipe Campelo, on the dec. 12th, 2023
+* Special thanks: Ivo at
+* https://stackoverflow.com/questions/77653995/flutter-setstate-of-multiple-instances-of-a-stateful-widget-in-a-page/77654061#77654061
+*/
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -28,8 +36,14 @@ class _DicePageState extends State<DicePage> {
     return Center(
       child: Row(
         children: [
-          Die(DiePosition.Left),
-          Die(DiePosition.Right),
+          /* Here, you are instantiating two Die widgets in the DicePage widget.
+            setState is a function that allows the modification of the internal
+            state of the DicePage widget. It's passed to the Die widget so that
+            it can trigger a state update in the parent (DicePage) when the die
+            is pressed.
+          */
+          Die(DiePosition.Left, setState),
+          Die(DiePosition.Right, setState),
         ],
       ),
     );
@@ -43,17 +57,20 @@ enum DiePosition {
 
 class Die extends StatefulWidget {
   final DiePosition diePosition;
-  Die(this.diePosition);
+  final Function(VoidCallback) setParent;
+
+  Die(this.diePosition, this.setParent);
 
   @override
   State<Die> createState() => _DieState();
 }
 
 class _DieState extends State<Die> {
-  Map<DiePosition, int> dieNumbers = {
+  // Here, the Map is static so there's only a single instance for all the dice
+  static Map<DiePosition, int> dieNumbers = {
     DiePosition.Left: 1,
     DiePosition.Right: 1
-  }; //
+  };
 
   Random rd = Random();
 
@@ -74,9 +91,19 @@ class _DieState extends State<Die> {
   }
 
   void setBothDiceState(Random rd) {
-    setState(() {
+    /* In the setBothDiceState method of the _DieState class, you are calling
+      the setParent function and passing a function as an argument. This function
+      updates the state of the parent (DicePage) by generating random numbers for
+      the left and right dice. This triggers a rebuild of the UI, reflecting the
+      new state.
+
+      Since setParent() is a Die's function we reference it by its parent
+      class: widget. Then, each die in the row on DicePage call their parent's
+      (the actual DicePage) setState function.
+    */
+    widget.setParent(() {
       dieNumbers[DiePosition.Left] = rd.nextInt(6) + 1; // 1...6
       dieNumbers[DiePosition.Right] = rd.nextInt(6) + 1;
-    }); // 1 - 6
+    });
   }
 }
