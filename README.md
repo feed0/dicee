@@ -22,4 +22,7 @@ An app so that you and your siblings can test the odds and trust each other to p
 
 >This is a companion project to The App Brewery's Complete Flutter Development Bootcamp, check out the full course at [www.appbrewery.co](https://www.appbrewery.co/)
 
+## Speacial thanks
+- Mr. Ivo at [StackOverflow](https://stackoverflow.com/questions/77653995/flutter-setstate-of-multiple-instances-of-a-stateful-widget-in-a-page/77654061#77654061)
+
 ![End Banner](https://github.com/londonappbrewery/Images/blob/master/readme-end-banner.png)
